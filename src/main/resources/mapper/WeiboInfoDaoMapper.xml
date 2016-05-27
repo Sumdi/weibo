@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.uestc.weibo.dao.WeiboInfoDao">
+
+	<!-- 查询微博 -->
+	<select id="selectWeibo" parameterType="Integer" resultType="WeiboInfo">
+		SELECT
+			w.weibo_content,
+			w.time,
+			w.cal,
+			w.commentNum,
+			n.account "userInfo.account",
+			n.nickname "userInfo.nickname",
+			n.image "userInfo.image",
+			n.fans "userInfo.fans",
+			n.follow "userInfo.follow",
+			n.weibo "userInfo.weibo"
+		FROM
+			weibo w
+		INNER JOIN follow f ON w.id = f.fid
+		INNER JOIN normalinfo n ON n.id = w.id
+		WHERE
+			EXISTS (
+				SELECT
+					f.fid
+				FROM
+					follow
+				WHERE
+					f.id = #{id}
+			) OR w.id = #{id}
+			ORDER BY w.weibo_id DESC LIMIT #{start}, #{size}
+	</select>
+
+</mapper>

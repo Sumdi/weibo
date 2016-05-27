@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.uestc.weibo.dao.UserInfoDao">
+    <sql id="cols">
+        id,account,nickname,password,image,follow,fans,weibo
+    </sql>
+    
+    <!-- 查询一个用户 -->
+    <select id="selectByAccount" parameterType="string" resultType="UserInfo">
+        select <include refid="cols"/> from normalInfo where account=#{account,jdbcType=VARCHAR}
+    </select>
+    
+    <!-- 新增 -->
+    <insert id="add" parameterType="userInfo">
+        insert into normalInfo ( account,nickname,password,image,follow,fans,weibo) values(#{account},#{nickname},#{password},#{image},#{follow},#{fans},#{weibo})
+    </insert>
+    
+</mapper>
